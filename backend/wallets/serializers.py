@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import BankAccount, Operation
+from .models import Wallet, Operation
 
-class BankAccountSerializer(serializers.ModelSerializer):
+class WalletSerializer(serializers.ModelSerializer):
     class Meta:
-        model = BankAccount 
+        model = Wallet 
         fields = ("account_id", "amount")
 
 class OperationSerializer(serializers.Serializer):
