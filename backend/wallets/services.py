@@ -6,27 +6,20 @@ from rest_framework.exceptions import ValidationError
 from .models import Operation, Wallet
 
 
-def apply_operation(account: Wallet, user, operation_type: str, amount: Decimal) -> Decimal:
+def apply_operation(wallet: Wallet, user, operation_type: str, amount: Decimal) -> Decimal:
     with transaction.atomic():
-        account = Wallet.objects.select_for_update().get(pk=account.pk)
+        wallet = Wallet.objects.select_for_update().get(pk=wallet.pk)
 
         if operation_type == Operation.OperationChoices.WITHDRAW:
-            if account.amount < amount:
+            if wallet.amount < amount:
                 raise ValidationError("Not enough money for the withdraw")
 
-            account.amount -= amount
+            wallet.amount -= amount
         elif operation_type == Operation.OperationChoices.DEPOSIT:
-            account.amount += amount
+            wallet.amount += amount
         else:
             raise ValidationError("Invalid operation type")
 
-        account.save()
+        wallet.save()
 
-        Operation.objects.create(
-            bank_account=account,
-            user=user,
-            operation_type=operation_type,
-            amount=amount
-        )
-
-        return account.amount
+        return wallet.amount
