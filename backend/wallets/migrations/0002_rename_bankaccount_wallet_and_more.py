@@ -7,18 +7,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallets', '0001_initial'),
+        ("wallets", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='BankAccount',
-            new_name='Wallet',
+            old_name="BankAccount",
+            new_name="Wallet",
         ),
         migrations.RenameField(
-            model_name='operation',
-            old_name='bank_account',
-            new_name='wallet',
+            model_name="operation",
+            old_name="bank_account",
+            new_name="wallet",
         ),
     ]

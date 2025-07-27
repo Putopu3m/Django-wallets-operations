@@ -7,19 +7,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('wallets', '0002_rename_bankaccount_wallet_and_more'),
+        ("wallets", "0002_rename_bankaccount_wallet_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='wallet',
-            old_name='account_id',
-            new_name='wallet_id',
+            model_name="wallet",
+            old_name="account_id",
+            new_name="wallet_id",
         ),
         migrations.AlterField(
-            model_name='wallet',
-            name='users',
-            field=models.ManyToManyField(related_name='wallets', to=settings.AUTH_USER_MODEL),
+            model_name="wallet",
+            name="users",
+            field=models.ManyToManyField(
+                related_name="wallets", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

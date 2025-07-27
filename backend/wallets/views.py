@@ -1,11 +1,12 @@
+from decimal import Decimal
+
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, views
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.request import Request
-from decimal import Decimal
+from rest_framework.response import Response
 
-from .models import Wallet, Operation
+from .models import Operation, Wallet
 from .permissions import IsWalletOwner
 from .serializers import OperationSerializer, WalletSerializer
 from .services import apply_operation
@@ -18,16 +19,17 @@ class WalletListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return self.request.user.wallets.all()
-    
+
     def perform_create(self, serializer):
         wallet = serializer.save()
         wallet.users.add(self.request.user)
         return super().perform_create(serializer)
-    
+
+
 class WalletDetailView(generics.RetrieveAPIView):
     queryset = Wallet.objects.all()
     serializer_class = WalletSerializer
-    lookup_url_kwarg = 'wallet_id'
+    lookup_url_kwarg = "wallet_id"
     permission_classes = [IsAuthenticated, IsWalletOwner]
 
 
@@ -35,7 +37,7 @@ class WalletOperationView(views.APIView):
     permission_classes = [IsAuthenticated, IsWalletOwner]
 
     def patch(self, request: Request, wallet_id):
-        operation_type = request.data['operation_type']
+        operation_type = request.data["operation_type"]
         amount = Decimal(request.data["amount"])
         wallet = get_object_or_404(Wallet, pk=wallet_id)
         new_amount = apply_operation(wallet, request.user, operation_type, amount)
@@ -43,7 +45,7 @@ class WalletOperationView(views.APIView):
             wallet=wallet,
             user=request.user,
             operation_type=operation_type,
-            amount=new_amount
+            amount=new_amount,
         )
         serialized_wallet = WalletSerializer(wallet)
         return Response(serialized_wallet.data)
@@ -51,7 +53,7 @@ class WalletOperationView(views.APIView):
 
 class OperationsListView(generics.ListAPIView):
     queryset = Operation.objects.all()
-    serializer_class = OperationSerializer 
+    serializer_class = OperationSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

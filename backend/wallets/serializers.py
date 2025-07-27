@@ -5,8 +5,9 @@ from .models import Operation, Wallet
 
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Wallet 
+        model = Wallet
         fields = ("wallet_id", "amount")
+
 
 class OperationSerializer(serializers.Serializer):
     operation_type = serializers.ChoiceField(choices=Operation.OperationChoices.choices)
