@@ -1,6 +1,8 @@
 from decimal import Decimal
+
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
+
 from .models import Operation, Wallet
 
 
