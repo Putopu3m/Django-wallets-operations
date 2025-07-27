@@ -14,4 +14,8 @@ class WalletDetailView(generics.RetrieveAPIView):
     lookup_url_kwarg = 'wallet_id'
     permission_classes = [IsAuthenticated, IsWalletOwner]
 
+
+class WalletOperationView(generics.GenericAPIView):
+    pass
+
     

@@ -10,13 +10,13 @@ def apply_operation(account: Wallet, user, operation_type: str, amount: Decimal)
 
         if operation_type == Operation.OperationChoices.WITHDRAW:
             if account.amount < amount:
-                raise ValidationError("Insufficient funds.")
+                raise ValidationError("Not enough money for the withdraw")
 
             account.amount -= amount
         elif operation_type == Operation.OperationChoices.DEPOSIT:
             account.amount += amount
         else:
-            raise ValidationError("Invalid operation type.")
+            raise ValidationError("Invalid operation type")
 
         account.save()
 

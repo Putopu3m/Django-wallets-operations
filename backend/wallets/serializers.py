@@ -4,7 +4,7 @@ from .models import Wallet, Operation
 class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet 
-        fields = ("account_id", "amount")
+        fields = ("wallet_id", "amount")
 
 class OperationSerializer(serializers.Serializer):
     operation_type = serializers.ChoiceField(choices=Operation.OperationChoices.choices)
