@@ -48,4 +48,12 @@ class WalletOperationView(views.APIView):
         serialized_wallet = WalletSerializer(wallet)
         return Response(serialized_wallet.data)
 
-    
+
+class OperationsListView(generics.ListAPIView):
+    queryset = Operation.objects.all()
+    serializer_class = OperationSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = self.request.user.operations.all()
+        return qs
