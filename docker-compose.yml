@@ -2,6 +2,8 @@ services:
   db:
     image: postgres
     restart: always
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_DB: djangowalletoperations
       POSTGRES_USER: postgres
@@ -9,7 +11,7 @@ services:
     # volumes:
     #   - db-volume:/var/lib/postgresql/data
     networks:
-      - weather-net
+      - wallets-net
 
   backend:
     build:
@@ -22,13 +24,13 @@ services:
       POSTGRES_DB: djangowalletoperations
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: db
     networks:
-      - weather-net
+      - wallets-net
 
 # volumes:
 #   db-volume:
 #     driver: local
 
 networks:
-  weather-net:
+  wallets-net:

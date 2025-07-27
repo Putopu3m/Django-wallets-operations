@@ -17,5 +17,5 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Копируем и задаем точку входа
-COPY entrypoint.sh /entrypoint.sh
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
