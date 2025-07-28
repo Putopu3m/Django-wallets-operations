@@ -1,7 +1,9 @@
 from decimal import Decimal
 
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, views
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -36,19 +38,27 @@ class WalletDetailView(generics.RetrieveAPIView):
 class WalletOperationView(views.APIView):
     permission_classes = [IsAuthenticated, IsWalletOwner]
 
-    def patch(self, request: Request, wallet_id):
-        operation_type = request.data["operation_type"]
-        amount = Decimal(request.data["amount"])
-        wallet = get_object_or_404(Wallet, pk=wallet_id)
-        new_amount = apply_operation(wallet, request.user, operation_type, amount)
-        operation = Operation.objects.create(
-            wallet=wallet,
-            user=request.user,
-            operation_type=operation_type,
-            amount=new_amount,
-        )
-        serialized_wallet = WalletSerializer(wallet)
-        return Response(serialized_wallet.data)
+    def post(self, request: Request, wallet_id):
+        try:
+            operation_type = request.data["operation_type"]
+            amount = Decimal(request.data["amount"])
+            try:
+                wallet = get_object_or_404(Wallet, pk=wallet_id)
+            except Http404 as error:
+                return Response(
+                    {"detail": "Object not found."}, status=status.HTTP_404_NOT_FOUND
+                )
+            apply_operation(wallet, operation_type, amount)
+            Operation.objects.create(
+                wallet=wallet,
+                user=request.user,
+                operation_type=operation_type,
+                amount=amount,
+            )
+
+            return Response(WalletSerializer(wallet).data)
+        except ValidationError as error:
+            return Response({"detail": str(error)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OperationsListView(generics.ListAPIView):
@@ -57,5 +67,4 @@ class OperationsListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        qs = self.request.user.operations.all()
-        return qs
+        return self.request.user.operations.all()

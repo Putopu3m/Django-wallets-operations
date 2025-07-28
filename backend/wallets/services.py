@@ -6,9 +6,7 @@ from rest_framework.exceptions import ValidationError
 from .models import Operation, Wallet
 
 
-def apply_operation(
-    wallet: Wallet, user, operation_type: str, amount: Decimal
-) -> Decimal:
+def apply_operation(wallet: Wallet, operation_type: str, amount: Decimal) -> None:
     with transaction.atomic():
         wallet = Wallet.objects.select_for_update().get(pk=wallet.pk)
 
@@ -23,5 +21,3 @@ def apply_operation(
             raise ValidationError("Invalid operation type")
 
         wallet.save()
-
-        return wallet.amount
