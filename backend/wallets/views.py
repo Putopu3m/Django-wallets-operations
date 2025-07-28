@@ -1,9 +1,9 @@
 from decimal import Decimal
 
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, views
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -39,26 +39,26 @@ class WalletOperationView(views.APIView):
     permission_classes = [IsAuthenticated, IsWalletOwner]
 
     def post(self, request: Request, wallet_id):
-        try:
-            operation_type = request.data["operation_type"]
-            amount = Decimal(request.data["amount"])
-            try:
-                wallet = get_object_or_404(Wallet, pk=wallet_id)
-            except Http404 as error:
-                return Response(
-                    {"detail": "Object not found."}, status=status.HTTP_404_NOT_FOUND
-                )
-            apply_operation(wallet, operation_type, amount)
-            Operation.objects.create(
-                wallet=wallet,
-                user=request.user,
-                operation_type=operation_type,
-                amount=amount,
-            )
+        operation_type = request.data["operation_type"]
+        amount = Decimal(request.data["amount"])
+        wallet = get_object_or_404(Wallet, pk=wallet_id)
 
-            return Response(WalletSerializer(wallet).data)
+        if request.user not in wallet.users.all():
+            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            apply_operation(wallet, operation_type, Decimal(amount))
         except ValidationError as error:
             return Response({"detail": str(error)}, status=status.HTTP_400_BAD_REQUEST)
+
+        Operation.objects.create(
+            wallet=wallet,
+            user=request.user,
+            operation_type=operation_type,
+            amount=amount,
+        )
+
+        return Response(WalletSerializer(wallet).data)
 
 
 class OperationsListView(generics.ListAPIView):
