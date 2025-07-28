@@ -1,7 +1,11 @@
 from django.urls import path
 
-from .views import (OperationsListView, WalletDetailView, WalletListCreateView,
-                    WalletOperationView)
+from .views import (
+    OperationsListView,
+    WalletDetailView,
+    WalletListCreateView,
+    WalletOperationView,
+)
 
 urlpatterns = [
     path("", WalletListCreateView.as_view(), name="wallet-list-create"),
