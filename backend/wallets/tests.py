@@ -121,7 +121,7 @@ def test_operations_list(auth_client: APIClient, wallet: Wallet, user: User):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_concurrent_withdrawals(user, auth_client):
+def test_concurrent_withdrawals(auth_client: APIClient, user: User):
     wallet = Wallet.objects.create(amount=Decimal("100.00"))
     wallet.users.add(user)
 
@@ -159,7 +159,7 @@ def test_concurrent_withdrawals(user, auth_client):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_concurrent_deposits(user, auth_client):
+def test_concurrent_deposits(auth_client: APIClient, user: User):
     wallet = Wallet.objects.create(amount=Decimal("100.00"))
     wallet.users.add(user)
 
