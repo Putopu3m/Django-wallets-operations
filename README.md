@@ -1,9 +1,9 @@
 # Django Wallet API
 
-**Django Wallets Operations API** — это RESTful веб-приложение для управления кошельками и финансовыми операциями (пополнение и снятия средств) с поддержкой:
+**Django Wallets Operations API** — это RESTful веб-приложение для управления кошельками и финансовыми операциями (пополнение и снятие средств) с поддержкой:
 - JWT-аутентификации (через `djangorestframework-simplejwt`);
 - регистрации и входа пользователей;
-- множественных пользователей на один кошелёк;
+- нескольких пользователей на один кошелёк;
 - истории операций;
 - конкурентных операций;
 - автодокументации через `drf-spectacular` (Swagger UI / ReDoc).
@@ -92,7 +92,7 @@ docker-compose exec backend python manage.py createsuperuser
 
 ## Тестирование
 
-Для запуска всех тестов и покрытия:
+Для запуска тестов и покрытия:
 
 ```bash
 docker-compose exec backend pytest --cov
