@@ -99,7 +99,15 @@ def test_withdraw_not_enough_money(auth_client: APIClient, wallet: Wallet):
 
 
 @pytest.mark.django_db
-def test_access_denied_to_other_user_wallet(auth_client2: APIClient, wallet: Wallet):
+def test_operation_negative_amount(auth_client: APIClient, wallet: Wallet):
+    url = reverse("wallet-operation", kwargs={"wallet_id": wallet.pk})
+    response = auth_client.post(url, {"operation_type": "DEPOSIT", "amount": "-100.00"})
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "Amount must be positive" in response.data["detail"]
+
+
+@pytest.mark.django_db
+def test_wallet_access_denied_to_other_user(auth_client2: APIClient, wallet: Wallet):
     url = reverse("wallet-detail", kwargs={"wallet_id": wallet.pk})
     response = auth_client2.get(url)
     assert response.status_code == 403

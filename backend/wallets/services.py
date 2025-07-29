@@ -10,6 +10,9 @@ def apply_operation(wallet: Wallet, operation_type: str, amount: Decimal) -> Non
     with transaction.atomic():
         wallet = Wallet.objects.select_for_update().get(pk=wallet.pk)
 
+        if amount < 0:
+            raise ValidationError("Amount must be positive")
+
         if operation_type == Operation.OperationChoices.WITHDRAW:
             if wallet.amount < amount:
                 raise ValidationError("Not enough money for the withdraw")

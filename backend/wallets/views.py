@@ -48,7 +48,7 @@ class WalletOperationView(views.APIView):
         try:
             apply_operation(wallet, operation_type, Decimal(amount))
         except ValidationError as error:
-            return Response({"detail": str(error)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": repr(error)}, status=status.HTTP_400_BAD_REQUEST)
 
         Operation.objects.create(
             wallet=wallet,
