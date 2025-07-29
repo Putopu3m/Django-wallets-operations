@@ -5,9 +5,13 @@ from rest_framework.test import APIClient
 User = get_user_model()
 
 
+@pytest.fixture
+def client():
+    return APIClient()
+
+
 @pytest.mark.django_db
-def test_user_registration():
-    client = APIClient()
+def test_user_registration(client: APIClient):
     response = client.post(
         "/auth/register/", {"username": "testuser", "password": "pass123"}
     )
@@ -16,9 +20,8 @@ def test_user_registration():
 
 
 @pytest.mark.django_db
-def test_user_registration_existing_username():
+def test_user_registration_existing_username(client: APIClient):
     User.objects.create_user(username="testuser", password="pass123")
-    client = APIClient()
     response = client.post(
         "/auth/register/", {"username": "testuser", "password": "newpass"}
     )
@@ -26,8 +29,7 @@ def test_user_registration_existing_username():
 
 
 @pytest.mark.django_db
-def test_user_registration_missing_fields():
-    client = APIClient()
+def test_user_registration_missing_fields(client: APIClient):
     response = client.post("/auth/register/", {"username": "useronly"})
     assert response.status_code == 400
 
@@ -36,9 +38,8 @@ def test_user_registration_missing_fields():
 
 
 @pytest.mark.django_db
-def test_token_obtain_success():
+def test_token_obtain_success(client: APIClient):
     User.objects.create_user(username="testuser", password="pass123")
-    client = APIClient()
     response = client.post(
         "/auth/token/", {"username": "testuser", "password": "pass123"}
     )
@@ -48,9 +49,8 @@ def test_token_obtain_success():
 
 
 @pytest.mark.django_db
-def test_token_obtain_fail_wrong_password():
+def test_token_obtain_fail_wrong_password(client: APIClient):
     User.objects.create_user(username="testuser", password="pass123")
-    client = APIClient()
     response = client.post(
         "/auth/token/", {"username": "testuser", "password": "wrongpass"}
     )

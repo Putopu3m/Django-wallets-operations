@@ -145,8 +145,10 @@ def test_concurrent_withdrawals(auth_client: APIClient, user: User):
             connection.close()
 
     threads = [threading.Thread(target=make_withdraw) for _ in range(num_threads)]
+
     for thread in threads:
         thread.start()
+
     for thread in threads:
         thread.join()
 
@@ -179,10 +181,11 @@ def test_concurrent_deposits(auth_client: APIClient, user: User):
         finally:
             connection.close()
 
-    # Запуск потоков
     threads = [threading.Thread(target=make_withdraw) for _ in range(num_threads)]
+
     for thread in threads:
         thread.start()
+        
     for thread in threads:
         thread.join()
 
