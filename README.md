@@ -1,6 +1,6 @@
 # Django Wallet API
 
-**Django Wallet API** — это RESTful веб-приложение для управления кошельками и финансовыми операциями (депозиты и снятия средств) с поддержкой:
+**Django Wallets Operations API** — это RESTful веб-приложение для управления кошельками и финансовыми операциями (пополнение и снятия средств) с поддержкой:
 - JWT-аутентификации (через `djangorestframework-simplejwt`);
 - регистрации и входа пользователей;
 - множественных пользователей на один кошелёк;
@@ -39,8 +39,8 @@
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/Putopu3m/Django-wallets-operations
-cd django-wallet-api
+git clone https://github.com/Putopu3m/Django-wallets-operations.git
+cd Django-wallets-operations
 ```
 
 ### 2. Соберите и запустите контейнеры
