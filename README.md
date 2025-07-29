@@ -1,4 +1,4 @@
-# Django Wallet API
+# Django Wallet Operations API
 
 **Django Wallets Operations API** — это RESTful веб-приложение для управления кошельками и финансовыми операциями (пополнение и снятие средств) с поддержкой:
 - JWT-аутентификации (через `djangorestframework-simplejwt`);
