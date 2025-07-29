@@ -185,7 +185,7 @@ def test_concurrent_deposits(auth_client: APIClient, user: User):
 
     for thread in threads:
         thread.start()
-        
+
     for thread in threads:
         thread.join()
 
