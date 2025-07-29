@@ -39,7 +39,7 @@
 ### 1. Клонируйте репозиторий
 
 ```bash
-git clone https://github.com/yourname/django-wallet-api.git
+git clone https://github.com/Putopu3m/Django-wallets-operations
 cd django-wallet-api
 ```
 
