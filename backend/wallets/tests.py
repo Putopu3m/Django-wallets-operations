@@ -199,6 +199,6 @@ def test_concurrent_deposits(auth_client: APIClient, user: User):
 
     expected_balance = wallet.amount + deposit_amount * num_threads
     wallet.refresh_from_db()
-    assert (
-        wallet.amount == expected_balance
-    ), f"Expected: {expected_balance}, Actual: {wallet.amount}"
+    operations_count = wallet.operations.count()
+    assert wallet.amount == expected_balance
+    assert operations_count <= num_threads
