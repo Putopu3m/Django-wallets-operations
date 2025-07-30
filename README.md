@@ -12,8 +12,8 @@
 
 ## Технологии
 
-- Python 3.13
-- Django
+- Python 3.11+
+- Django 5
 - Django REST Framework
 - PostgreSQL
 - Docker + Docker Compose
